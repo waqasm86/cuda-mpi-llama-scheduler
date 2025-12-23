@@ -19,6 +19,20 @@ add_executable(mls
   src/cuda_post.cu
 )
 
+target_sources(mls PRIVATE src/llama_parse.cpp)
+
+# Suppress GCC-extension line directive warning coming from nvcc host compilation
+target_compile_options(mls PRIVATE
+  $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-Wno-cpp>
+)
+
+target_compile_options(mls PRIVATE
+  $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-Wno-cpp>
+  $<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>
+)
+
+
+target_include_directories(mls PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 target_include_directories(mls PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(mls PRIVATE
